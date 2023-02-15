@@ -2,6 +2,6 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 @font-face {
-    font-family: "VIBES" ;
-    src: url('../public/StayVibes.otf');
+    font-family: "mt" ;
+    src: url('../public/mt.ttf');
 }
