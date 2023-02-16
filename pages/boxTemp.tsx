@@ -1,7 +1,9 @@
 import React from 'react';
 import Image from "next/image"
 
-const BoxTemp = (props) => {
+const BoxTemp = (props: { name: string;
+                          img1: StaticImageData ;
+}) => {
   return (
     
 <div className="hover:scale-105 transition-all duration-300 ">
