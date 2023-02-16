@@ -12,6 +12,11 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        'sans': ['mt', "sans-serif"]
+      }
+      
+
 
   },
   plugins: [],
