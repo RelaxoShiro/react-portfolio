@@ -1,5 +1,8 @@
 import React from 'react';
-import Image from "next/image"
+
+
+
+import Image, { StaticImageData } from "next/image"
 
 const BoxTemp = (props: { name: string;
                           img1: StaticImageData ;
