@@ -14,15 +14,10 @@ export default function Home() {
    
  
       <div className='flex'>
-        <section className=' lg:visible invisible flex-auto w-1/5 order-first sticky h-screen left-0 top-0 bg-white border-r border-black z-1'>
+        <section className=' lg:visible invisible flex-auto w-1/3 order-first sticky h-screen left-0 top-0 bg-white border-r border-black z-1'>
           <h1 className='py-6 px-2 text-4xl font-bold'>Dario Maier Tolic</h1>
           <p className='py-2 px-2 text-gray-800 text-sm'>Designer and Developer based in Germany who loves to being creative,organized and playful in my work.</p>
-          <div className='text-5xl flex  justify-center gap-16 px-4 py-3 text-black'>   
-            <DiIllustrator/>
-            <DiPhotoshop/>
-            <SiBlender/>
-            <SiVisualstudiocode/>
-          </div>
+        
           <div className="min-w-fit h-1/2">
 
 
@@ -51,13 +46,13 @@ export default function Home() {
             
             <div className='right-0 flex gap-8 gap-y-20 flex-wrap justify-evenly px-12 pt-12'>
                 
-              <BoxTemp name="BLENDER" img1={img2} />      
-              <BoxTemp name="ZZ!>3W" img1={img6} />
-              <BoxTemp name="AEX EE A D" img1={img3} />
-              <BoxTemp name="ZZ!>3W" img1={img4} /> 
-              <BoxTemp name="ZZ!>3W" img1={img5} />
-              <BoxTemp name="ZZ!>3W" img1={img4} />  
-              <BoxTemp name="ZZ!>3W" img1={img5} />
+              <BoxTemp name="EXAMPLE-00" img1={img2} />      
+              <BoxTemp name="EXAMPLE-01" img1={img6} />
+              <BoxTemp name="EXAMPLE-02" img1={img3} />  
+              <BoxTemp name="EXAMPLE-03" img1={img4} /> 
+              <BoxTemp name="EXAMPLE-04" img1={img5} />
+              <BoxTemp name="EXAMPLE-05" img1={img4} />  
+              <BoxTemp name="EXAMPLE-06" img1={img5} />
               
             
               
