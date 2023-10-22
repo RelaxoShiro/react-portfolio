@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Handle, useReactFlow } from "reactflow";
+import { Handle, useReactFlow, Position } from "reactflow";
 
-const CustomNode = ({ data, id, sourcePosition, targetPosition }: any) => {
+const CustomNode = ({ data, id, sourcePosition }: any) => {
   const { setNodes } = useReactFlow();
 
   const onChange = (evt: any, property: any) => {
@@ -22,7 +22,7 @@ const CustomNode = ({ data, id, sourcePosition, targetPosition }: any) => {
       <Handle
         type="target"
         id="a"
-        position={targetPosition}
+        position={Position.Left}
         isConnectable={true}
       />
       <div className="leading-none p-4 text-white  h-28 rounded-t-xl bg-cover bg-[url('/img/img1.png')]">
@@ -52,7 +52,7 @@ const CustomNode = ({ data, id, sourcePosition, targetPosition }: any) => {
       <Handle
         id="b"
         type="source"
-        position={sourcePosition}
+        position={Position.Right}
         isConnectable={true}
       />
     </div>

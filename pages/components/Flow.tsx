@@ -12,6 +12,7 @@ import ReactFlow, {
   useEdgesState,
 } from "reactflow";
 import CustomNode from "./CustomNode";
+import ELK from "elkjs";
 import { FiSave, FiDownloadCloud, FiPlus } from "react-icons/fi";
 import "reactflow/dist/style.css";
 const flowKey = "example-flow";
@@ -30,7 +31,7 @@ const initialNodes = [
   { id: "2", data: { label: "Node 2" }, position: { x: 100, y: 200 } },
 ];
 
-const initialEdges = [{ id: "a", source: "1", target: "2" }];
+const initialEdges = [{ id: "a", source: "1", target: "2", type: "" }];
 
 const SaveRestore = () => {
   const reactFlowWrapper = useRef(null);
@@ -44,7 +45,7 @@ const SaveRestore = () => {
   const { project } = useReactFlow();
   const connectingNodeId = useRef(null);
   const onConnect = useCallback(
-    (params: any) => setEdges((eds) => addEdge(params, eds)),
+    (params: any) => setEdges((eds: any) => addEdge(params, eds)),
     [setEdges]
   );
   const onSave = useCallback(() => {
@@ -88,6 +89,43 @@ const SaveRestore = () => {
   const onConnectStart = useCallback((_: any, { nodeId }: any) => {
     connectingNodeId.current = nodeId;
   }, []);
+  const elk = new ELK();
+
+  const useLayoutedElements = () => {
+    const { getNodes, setNodes, getEdges, fitView } = useReactFlow();
+    const defaultOptions = {
+      "elk.algorithm": "layered",
+      "elk.layered.spacing.nodeNodeBetweenLayers": 100,
+      "elk.spacing.nodeNode": 80,
+    };
+
+    const getLayoutedElements = useCallback((options: any) => {
+      const layoutOptions = { ...defaultOptions, ...options };
+      const graph = {
+        id: "root",
+        layoutOptions: layoutOptions,
+        children: getNodes(),
+        edges: getEdges(),
+      };
+
+      elk.layout(graph).then(({ children }: any) => {
+        // By mutating the children in-place we saves ourselves from creating a
+        // needless copy of the nodes array.
+        children.forEach((node: any) => {
+          node.position = { x: node.x, y: node.y };
+        });
+
+        setNodes(children);
+        window.requestAnimationFrame(() => {
+          fitView();
+        });
+      });
+    }, []);
+
+    return { getLayoutedElements };
+  };
+  const { getLayoutedElements } = useLayoutedElements();
+
   return (
     <ReactFlow
       nodeTypes={nodeTypes}
@@ -121,6 +159,44 @@ const SaveRestore = () => {
           <FiPlus className="w-6 h-6 "></FiPlus>
         </button>
         <p></p>
+        <button
+          onClick={() =>
+            getLayoutedElements({
+              "elk.algorithm": "layered",
+              "elk.direction": "DOWN",
+            })
+          }
+        >
+          vertical layout
+        </button>
+        <button
+          onClick={() =>
+            getLayoutedElements({
+              "elk.algorithm": "layered",
+              "elk.direction": "RIGHT",
+            })
+          }
+        >
+          horizontal layout
+        </button>
+        <button
+          onClick={() =>
+            getLayoutedElements({
+              "elk.algorithm": "org.eclipse.elk.layered",
+            })
+          }
+        >
+          radial layout
+        </button>
+        <button
+          onClick={() =>
+            getLayoutedElements({
+              "elk.algorithm": "org.eclipse.elk.force",
+            })
+          }
+        >
+          force layout
+        </button>
       </Panel>
     </ReactFlow>
   );
