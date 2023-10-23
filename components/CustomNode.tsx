@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { Handle, useReactFlow, Position } from "reactflow";
+import {
+  Handle,
+  useReactFlow,
+  Position,
+  useOnSelectionChange,
+} from "reactflow";
 
 const CustomNode = ({ data, id, sourcePosition }: any) => {
   const { setNodes } = useReactFlow();
@@ -24,8 +29,23 @@ const CustomNode = ({ data, id, sourcePosition }: any) => {
       });
     });
   };
+  useOnSelectionChange({
+    //@ts-ignore
+    onChange: ({ nodes, edges }: { nodes: Node[]; edges: Edges[] }): void => {
+      const newData = { ...data };
+      setNodes((nodes) => {
+        return nodes.map((node) => {
+          if (node.id === id) {
+            node.style = { height: 400 };
+          }
+          return node;
+        });
+      });
+      console.log("changed selection", nodes, edges);
+    },
+  });
   return (
-    <div className="container border-[1px] w-72 border-opacity-20 h-[300px] border-black rounded-t-xl  bg-white">
+    <div className="container   border-[1px] w-72 border-opacity-20 h-[300px] border-black rounded-t-xl  bg-white">
       <Handle
         type="target"
         id="a"
