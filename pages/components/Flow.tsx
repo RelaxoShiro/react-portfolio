@@ -99,28 +99,31 @@ const SaveRestore = () => {
       "elk.spacing.nodeNode": 80,
     };
 
-    const getLayoutedElements = useCallback((options: any) => {
-      const layoutOptions = { ...defaultOptions, ...options };
-      const graph = {
-        id: "root",
-        layoutOptions: layoutOptions,
-        children: getNodes(),
-        edges: getEdges(),
-      };
+    const getLayoutedElements = useCallback(
+      (options: any) => {
+        const layoutOptions = { ...defaultOptions, ...options };
+        const graph = {
+          id: "root",
+          layoutOptions: layoutOptions,
+          children: getNodes(),
+          edges: getEdges(),
+        };
 
-      elk.layout(graph).then(({ children }: any) => {
-        // By mutating the children in-place we saves ourselves from creating a
-        // needless copy of the nodes array.
-        children.forEach((node: any) => {
-          node.position = { x: node.x, y: node.y };
-        });
+        elk.layout(graph).then(({ children }: any) => {
+          // By mutating the children in-place we saves ourselves from creating a
+          // needless copy of the nodes array.
+          children.forEach((node: any) => {
+            node.position = { x: node.x, y: node.y };
+          });
 
-        setNodes(children);
-        window.requestAnimationFrame(() => {
-          fitView();
+          setNodes(children);
+          window.requestAnimationFrame(() => {
+            fitView();
+          });
         });
-      });
-    }, []);
+      },
+      [defaultOptions, fitView, getEdges, getNodes, setNodes]
+    );
 
     return { getLayoutedElements };
   };
