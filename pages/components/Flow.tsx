@@ -69,7 +69,7 @@ const SaveRestore = () => {
     };
 
     restoreFlow();
-  }, [setNodes, setViewport]);
+  }, [setNodes, setViewport, setEdges]);
 
   const onAdd = useCallback(() => {
     const newNode = {
