@@ -101,15 +101,19 @@ const SaveRestore = () => {
 
     const getLayoutedElements = useCallback(
       (options: any) => {
-        defaultOptions;
-        const layoutOptions = { ...defaultOptions, ...options };
+        const defaultOptions2 = {
+          "elk.algorithm": "layered",
+          "elk.layered.spacing.nodeNodeBetweenLayers": 100,
+          "elk.spacing.nodeNode": 80,
+        };
+        const layoutOptions = { ...defaultOptions2, ...options };
         const graph = {
           id: "root",
           layoutOptions: layoutOptions,
           children: getNodes(),
           edges: getEdges(),
         };
-
+        //@ts-ignore
         elk.layout(graph).then(({ children }: any) => {
           // By mutating the children in-place we saves ourselves from creating a
           // needless copy of the nodes array.
@@ -205,8 +209,10 @@ const SaveRestore = () => {
     </ReactFlow>
   );
 };
-export default () => (
+const Flow = () => (
   <ReactFlowProvider>
     <SaveRestore />
   </ReactFlowProvider>
 );
+
+export default Flow;
