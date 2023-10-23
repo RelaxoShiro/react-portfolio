@@ -12,6 +12,7 @@ import ReactFlow, {
   useEdgesState,
   MiniMap,
   Controls,
+  SmoothStepEdge,
 } from "reactflow";
 import CustomNode from "./CustomNode";
 import ELK from "elkjs";
@@ -42,7 +43,7 @@ const SaveRestore = () => {
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const [rfInstance, setRfInstance] = useState(null);
   const { setViewport } = useReactFlow();
-  let id = 1;
+  let id = 10;
   const getId = () => `${id++}`;
   const { project } = useReactFlow();
   const connectingNodeId = useRef(null);
@@ -134,10 +135,45 @@ const SaveRestore = () => {
     return { getLayoutedElements };
   };
   const { getLayoutedElements } = useLayoutedElements();
+  const onConnectEnd = useCallback(
+    (event: any) => {
+      const targetIsPane = event.target.classList.contains("react-flow__pane");
 
+      if (targetIsPane) {
+        if (!reactFlowWrapper.current) return;
+
+        // we need to remove the wrapper bounds, in order to get the correct position
+        //@ts-ignore
+        const { top, left } = reactFlowWrapper.current.getBoundingClientRect();
+        const id = getId();
+        const newNode = {
+          id,
+          type: "selectorNode",
+          // we are removing the half of the node width (75) to center the new node
+          position: project({
+            x: event.clientX - left - 75,
+            y: event.clientY - top,
+          }),
+          data: { label: `Node ${id}` },
+        };
+        //@ts-ignore
+        setNodes((nds) => nds.concat(newNode));
+        setEdges((eds) =>
+          //@ts-ignore
+          eds.concat({
+            id,
+            source: connectingNodeId.current,
+            target: id,
+            type: "smoothstep",
+          })
+        );
+      }
+    },
+    [project]
+  );
   return (
     <>
-      <div>
+      <div ref={reactFlowWrapper}>
         <Toaster
           position="bottom-right"
           reverseOrder={false}
@@ -169,7 +205,13 @@ const SaveRestore = () => {
         nodeTypes={nodeTypes}
         nodes={nodes}
         edges={edges}
+        edgeTypes={{
+          smoothstep: SmoothStepEdge, // Map the "smoothstep" type to the SmoothStepEdge component
+        }}
+        multiSelectionKeyCode="Shift"
         onNodesChange={onNodesChange}
+        //@ts-ignore
+        onConnectEnd={onConnectEnd}
         //@ts-ignore
         onInit={setRfInstance}
         onEdgesChange={onEdgesChange}
