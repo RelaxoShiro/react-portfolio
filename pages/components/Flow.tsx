@@ -209,10 +209,7 @@ const SaveRestore = () => {
     </ReactFlow>
   );
 };
-const Flow = () => (
-  <ReactFlowProvider>
-    <SaveRestore />
-  </ReactFlowProvider>
-);
-
+function Flow() {
+  return <SaveRestore />;
+}
 export default Flow;

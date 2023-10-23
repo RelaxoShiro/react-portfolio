@@ -1,15 +1,4 @@
-import img1 from "../public/img/img1.png";
-import img2 from "../public/img/img2.png";
-import img3 from "../public/img/img3.png";
-import img4 from "../public/img/img4.png";
-import img5 from "../public/img/img7.png";
-import img6 from "../public/img/img6.png";
-import BoxTemp from "./boxTemp";
-import Spline from "@splinetool/react-spline";
-import { DiIllustrator, DiPhotoshop } from "react-icons/di";
-import { SiBlender, SiVisualstudiocode } from "react-icons/si";
 import Flow from "./components/Flow";
-import BasicFlow from "./components/Flow";
 export default function Home() {
   return (
     <>

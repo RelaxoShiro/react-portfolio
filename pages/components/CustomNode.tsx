@@ -3,19 +3,26 @@ import { Handle, useReactFlow, Position } from "reactflow";
 
 const CustomNode = ({ data, id, sourcePosition }: any) => {
   const { setNodes } = useReactFlow();
-
+  const newData = { ...data };
+  if (!data) {
+    data = {
+      title: "",
+      label: "",
+      desc: "",
+    };
+  }
   const onChange = (evt: any, property: any) => {
-    setNodes((nodes) =>
-      nodes.map((node) => {
+    // Ensure data is never undefined
+    const newData = { ...data };
+    newData[property] = evt.target.value;
+    setNodes((nodes) => {
+      return nodes.map((node) => {
         if (node.id === id) {
-          node.data = {
-            ...node.data,
-            [property]: evt.target.value,
-          };
+          node.data = newData;
         }
         return node;
-      })
-    );
+      });
+    });
   };
   return (
     <div className="container border-[1px] w-72 border-opacity-20 h-[300px] border-black rounded-t-xl  bg-white">
@@ -27,6 +34,7 @@ const CustomNode = ({ data, id, sourcePosition }: any) => {
       />
       <div className="leading-none p-4 text-white  h-28 rounded-t-xl bg-cover bg-[url('/img/img1.png')]">
         <input
+          name="tit333le"
           onChange={(evt) => onChange(evt, "title")}
           type="text"
           value={data.title}
@@ -43,7 +51,7 @@ const CustomNode = ({ data, id, sourcePosition }: any) => {
       <div className="p-4 leading-none w-full h-full ">
         <p className="text-[9px] text-gray-300">description</p>
         <textarea
-          name="label"
+          name="desc"
           onChange={(evt) => onChange(evt, "desc")}
           value={data.desc}
           className="text-[16px] resize-none  focus:resize-none focus:outline-none border-0 rounded-md bg-gray-200 w-[100%] h-[40%] "
