@@ -10,13 +10,15 @@ import ReactFlow, {
   useReactFlow,
   Panel,
   useEdgesState,
+  MiniMap,
+  Controls,
 } from "reactflow";
 import CustomNode from "./CustomNode";
 import ELK from "elkjs";
 import { FiSave, FiDownloadCloud, FiPlus } from "react-icons/fi";
 import "reactflow/dist/style.css";
 const flowKey = "example-flow";
-
+import toast, { Toaster } from "react-hot-toast";
 const getNodeId = () => `randomnode_${+new Date()}`;
 const nodeTypes = {
   selectorNode: CustomNode,
@@ -129,88 +131,126 @@ const SaveRestore = () => {
       },
       [fitView, getEdges, getNodes, setNodes]
     );
-
     return { getLayoutedElements };
   };
   const { getLayoutedElements } = useLayoutedElements();
 
   return (
-    <ReactFlow
-      nodeTypes={nodeTypes}
-      nodes={nodes}
-      edges={edges}
-      onNodesChange={onNodesChange}
-      //@ts-ignore
-      onInit={setRfInstance}
-      onEdgesChange={onEdgesChange}
-      onConnect={onConnect}
-      onConnectStart={onConnectStart}
-      fitView
-    >
-      <Panel position="top-right">
-        <button
-          className="border-2 w-12 h-12 rounded-full border-black"
-          onClick={onSave}
-        >
-          <FiSave className="w-6 h-6 "></FiSave>
-        </button>
-        <button
-          className="border-2  w-12 h-12  rounded-full border-black"
-          onClick={onRestore}
-        >
-          <FiDownloadCloud className="w-6 h-6 "></FiDownloadCloud>
-        </button>
-        <button
-          className="border-2 w-12 h-12 items-center rounded-full border-black"
-          onClick={onAdd}
-        >
-          <FiPlus className="w-6 h-6 "></FiPlus>
-        </button>
-        <p></p>
-        <button
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-          onClick={() =>
-            getLayoutedElements({
-              "elk.algorithm": "layered",
-              "elk.direction": "DOWN",
-            })
-          }
-        >
-          vertical layout
-        </button>
-        <button
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-          onClick={() =>
-            getLayoutedElements({
-              "elk.algorithm": "layered",
-              "elk.direction": "RIGHT",
-            })
-          }
-        >
-          horizontal layout
-        </button>
-        <button
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-          onClick={() =>
-            getLayoutedElements({
-              "elk.algorithm": "org.eclipse.elk.layered",
-            })
-          }
-        >
-          radial layout
-        </button>
-        <button
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-          onClick={() =>
-            getLayoutedElements({
-              "elk.algorithm": "org.eclipse.elk.force",
-            })
-          }
-        >
-          force layout
-        </button>
-      </Panel>
-    </ReactFlow>
+    <>
+      <div>
+        <Toaster
+          position="bottom-right"
+          reverseOrder={false}
+          gutter={8}
+          containerClassName=""
+          containerStyle={{}}
+          toastOptions={{
+            // Define default options
+            className: "",
+            duration: 5000,
+            style: {
+              background: "#363636",
+              color: "#fff",
+            },
+
+            // Default options for specific types
+            success: {
+              duration: 3000,
+              //@ts-ignore
+              theme: {
+                primary: "green",
+                secondary: "black",
+              },
+            },
+          }}
+        />
+      </div>
+      <ReactFlow
+        nodeTypes={nodeTypes}
+        nodes={nodes}
+        edges={edges}
+        onNodesChange={onNodesChange}
+        //@ts-ignore
+        onInit={setRfInstance}
+        onEdgesChange={onEdgesChange}
+        onConnect={onConnect}
+        onConnectStart={onConnectStart}
+        fitView
+      >
+        <Panel position="top-right">
+          <div className="m-4 flex gap-4">
+            <button
+              className="bg-blue-300 rounded-md p-2 w-[8.5rem] "
+              onClick={onSave}
+            >
+              Save Story
+            </button>
+            <button
+              className="bg-blue-300 rounded-md p-2 w-[8.5rem] "
+              onClick={onRestore}
+            >
+              Load Story
+            </button>
+            <button
+              className="bg-blue-300 rounded-md p-2 w-[8.5rem] "
+              onClick={onAdd}
+            >
+              Add Node
+            </button>
+          </div>
+          <div className="w-36 m-2 float-right flex-col grid grid-cols-1">
+            <button
+              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+              onClick={() => {
+                toast.success("Autolayout applied!");
+                getLayoutedElements({
+                  "elk.algorithm": "layered",
+                  "elk.direction": "DOWN",
+                });
+              }}
+            >
+              vertical layout
+            </button>
+            <button
+              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+              onClick={() => {
+                toast.success("Autolayout applied!");
+                getLayoutedElements({
+                  "elk.algorithm": "layered",
+                  "elk.direction": "RIGHT",
+                });
+              }}
+            >
+              horizontal layout
+            </button>
+            <button
+              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+              onClick={() => {
+                toast.success("Autolayout applied!");
+                getLayoutedElements({
+                  "elk.algorithm": "org.eclipse.elk.layered",
+                });
+              }}
+            >
+              radial layout
+            </button>
+            <button
+              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+              onClick={() => {
+                toast.success("Autolayout applied!");
+                getLayoutedElements({
+                  "elk.algorithm": "org.eclipse.elk.force",
+                });
+              }}
+            >
+              force layout
+            </button>
+          </div>
+        </Panel>
+        <MiniMap nodeStrokeWidth={3} zoomable pannable />
+        <Controls></Controls>
+      </ReactFlow>
+    </>
   );
 };
 function Flow() {

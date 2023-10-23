@@ -3,7 +3,7 @@ export default function Home() {
   return (
     <>
       <div className="flex">
-        <section className=" lg:visible invisible flex-auto w-1/3 order-first sticky h-screen left-0 top-0 bg-white border-r border-black z-1">
+        <section className=" lg:visible invisible flex-auto w-1/5 order-first sticky h-screen left-0 top-0 bg-white border-r border-black z-1">
           <h1 className="py-6 px-2 text-4xl font-bold">Dario Maier Tolic</h1>
           <p className="py-2 px-2 text-gray-800 text-sm">
             Designer and Developer based in Germany who loves to being
@@ -35,7 +35,7 @@ export default function Home() {
             </div>
           </div>
         </section>
-        <main className="w-[75%]">
+        <main className="w-[100%]">
           <Flow />
         </main>
       </div>
