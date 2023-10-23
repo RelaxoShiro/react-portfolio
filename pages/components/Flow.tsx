@@ -101,6 +101,7 @@ const SaveRestore = () => {
 
     const getLayoutedElements = useCallback(
       (options: any) => {
+        defaultOptions;
         const layoutOptions = { ...defaultOptions, ...options };
         const graph = {
           id: "root",
@@ -122,7 +123,7 @@ const SaveRestore = () => {
           });
         });
       },
-      [defaultOptions, fitView, getEdges, getNodes, setNodes]
+      [fitView, getEdges, getNodes, setNodes]
     );
 
     return { getLayoutedElements };
