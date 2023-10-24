@@ -267,18 +267,17 @@ const SaveRestore = (props: any) => {
   }, [rfInstance]);
   const onLoad = (reactFlowInstance: { fitView: () => any }) =>
     reactFlowInstance.fitView();
-  let firstLoad = true;
+
   //Function
   const onRestore = useCallback(() => {
     const restoreFlow = async () => {
       const flow = JSON.parse(localStorage.getItem(flowKey)!);
 
-      if (flow && firstLoad) {
+      if (flow) {
         const { x = 0, y = 0, zoom = 1 } = flow.viewport;
         setNodes(flow.nodes || []);
         setEdges(flow.edges || []);
         setViewport({ x, y, zoom });
-        firstLoad = false;
         toast.success("State loaded");
       }
     };
@@ -469,15 +468,11 @@ const SaveRestore = (props: any) => {
     [reactFlowInstance]
   );
 
-  const saveInterval = setInterval(onSave, 5000);
-
   // If you want to stop the interval after a certain number of repetitions, you can use setTimeout like this:
   // Stop calling onSave after 10 repetitions (10 * 5 seconds)
-  const repetitions = 10;
   setTimeout(() => {
-    clearInterval(saveInterval);
-    console.log("Stopped saving.");
-  }, repetitions * 5000);
+    const saveInterval = setInterval(onSave, 500);
+  }, 5000);
   //End
   return (
     <>
