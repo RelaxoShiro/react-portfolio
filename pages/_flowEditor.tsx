@@ -3,8 +3,11 @@ import Flow from "../components/Flow";
 export default function Home() {
   return (
     <>
-      <div className="flex">
-        <section className=" lg:visible invisible flex-auto w-1/5 order-first sticky h-screen left-0 top-0 bg-white border-r border-black z-1">
+      <div className="flex  " style={{ height: "calc(100vh - 70px)" }}>
+        <section
+          style={{ height: "calc(100vh - 63px)" }}
+          className=" lg:visible invisible  flex-auto w-1/5 order-first sticky   left-0 top-0 bg-white border-r border-black z-1"
+        >
           <h1 className="py-6 w-full text-center px-2 text-4xl font-bold">
             VN Designer
           </h1>

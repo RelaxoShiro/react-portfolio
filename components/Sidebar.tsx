@@ -7,7 +7,7 @@ const DndSidebar: React.FC = () => {
   };
 
   return (
-    <aside className="float-right">
+    <aside className="float-right fixed z-20 bg-blue-300 rounded-lg ">
       <div className="description">
         You can drag these nodes to the pane on the right.
       </div>
