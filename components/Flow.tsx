@@ -1,3 +1,4 @@
+//Imports
 import { useCallback, useMemo, useRef, useState } from "react";
 import ReactFlow, {
   addEdge,
@@ -13,10 +14,10 @@ import CustomNode from "./CustomNode";
 import ELK from "elkjs";
 import { FiSave, FiDownloadCloud, FiPlus } from "react-icons/fi";
 import "reactflow/dist/style.css";
-const flowKey = "example-flow";
 import toast, { Toaster } from "react-hot-toast";
 import Sidebar from "./Sidebar";
-const getNodeId = () => `randomnode_${+new Date()}`;
+//const declaration outside
+const flowKey = "example-flow";
 const nodeTypes = {
   selectorNode: CustomNode,
 };
@@ -225,13 +226,8 @@ const SaveRestore = () => {
     }),
     []
   );
-  const reactFlowWrapper = useRef(null);
-  //@ts-ignore
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-  const [rfInstance, setRfInstance] = useState(null);
-  const { setViewport } = useReactFlow();
 
+  //Helpers
   const getId = () => {
     let id: string | number;
     do {
@@ -240,17 +236,25 @@ const SaveRestore = () => {
     return String(id);
   };
 
+  const reactFlowWrapper = useRef(null);
+  //@ts-ignore
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const [rfInstance, setRfInstance] = useState(null);
+  const { setViewport } = useReactFlow();
   const initialElements = [...initialNodes, ...initialEdges];
-
   const [elements, setElements] = useState(initialElements);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
-
   const { project } = useReactFlow();
   const connectingNodeId = useRef(null);
+  const elk = new ELK();
+  //Function
   const onConnect = useCallback(
     (params: any) => setEdges((eds: any) => addEdge(params, eds)),
     [setEdges]
   );
+
+  //Function
   const onSave = useCallback(() => {
     if (rfInstance) {
       //@ts-ignore
@@ -259,6 +263,7 @@ const SaveRestore = () => {
     }
   }, [rfInstance]);
 
+  //Function
   const onRestore = useCallback(() => {
     const restoreFlow = async () => {
       const flow = JSON.parse(localStorage.getItem(flowKey)!);
@@ -274,9 +279,10 @@ const SaveRestore = () => {
     restoreFlow();
   }, [setNodes, setViewport, setEdges]);
 
+  //Function
   const onAdd = useCallback(() => {
     const newNode = {
-      id: "" + getNodeId(),
+      id: "" + getId(),
       type: "selectorNode",
       data: { label: "Added node" },
       position: {
@@ -289,11 +295,13 @@ const SaveRestore = () => {
     //@ts-ignore
     setNodes((nds) => nds.concat(newNode));
   }, [setNodes]);
+
+  //Function
   const onConnectStart = useCallback((_: any, { nodeId }: any) => {
     connectingNodeId.current = nodeId;
   }, []);
-  const elk = new ELK();
 
+  //Function
   const useLayoutedElements = () => {
     const { getNodes, setNodes, getEdges, fitView } = useReactFlow();
     const defaultOptions = {
@@ -335,6 +343,8 @@ const SaveRestore = () => {
     return { getLayoutedElements };
   };
   const { getLayoutedElements } = useLayoutedElements();
+
+  //Function
   const onConnectEnd = useCallback(
     (event: any) => {
       const targetIsPane = event.target.classList.contains("react-flow__pane");
@@ -361,16 +371,27 @@ const SaveRestore = () => {
         setEdges((eds) =>
           //@ts-ignore
           eds.concat({
+            //@ts-ignore
             id,
+
+            //@ts-ignore
             source: connectingNodeId.current,
+
+            //@ts-ignore
             target: id,
+
+            //@ts-ignore
             type: "smoothstep",
+
+            //@ts-ignore
           })
         );
       }
     },
     [project]
   );
+
+  //Function
   const onElementClick = (event: any, object: any) => {
     const graphElements = [object.id];
     console.log("w1");
@@ -399,11 +420,14 @@ const SaveRestore = () => {
       //return [...nodes, ...edges];
     });
   };
+
+  //Function
   const onDragOver = useCallback((event: any) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = "move";
   }, []);
 
+  //Function
   const onDrop = useCallback(
     (event) => {
       event.preventDefault();
@@ -433,6 +457,8 @@ const SaveRestore = () => {
     },
     [reactFlowInstance]
   );
+
+  //End
   return (
     <>
       <div ref={reactFlowWrapper}>
