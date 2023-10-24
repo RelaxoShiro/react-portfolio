@@ -20,6 +20,7 @@ import { FiSave, FiDownloadCloud, FiPlus } from "react-icons/fi";
 import "reactflow/dist/style.css";
 const flowKey = "example-flow";
 import toast, { Toaster } from "react-hot-toast";
+import Sidebar from "./Sidebar";
 const getNodeId = () => `randomnode_${+new Date()}`;
 const nodeTypes = {
   selectorNode: CustomNode,
@@ -235,11 +236,19 @@ const SaveRestore = () => {
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const [rfInstance, setRfInstance] = useState(null);
   const { setViewport } = useReactFlow();
-  let id = 10;
-  const getId = () => `${id++}`;
+
+  const getId = () => {
+    let id: string | number;
+    do {
+      id = Math.floor(Math.random() * 90000) + 10000;
+    } while (elements.some((element) => element.id === id));
+    return String(id);
+  };
+
   const initialElements = [...initialNodes, ...initialEdges];
 
   const [elements, setElements] = useState(initialElements);
+  const [reactFlowInstance, setReactFlowInstance] = useState(null);
 
   const { project } = useReactFlow();
   const connectingNodeId = useRef(null);
@@ -395,7 +404,40 @@ const SaveRestore = () => {
       //return [...nodes, ...edges];
     });
   };
+  const onDragOver = useCallback((event: any) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "move";
+  }, []);
 
+  const onDrop = useCallback(
+    (event) => {
+      event.preventDefault();
+      //@ts-ignore
+
+      const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
+      const type = event.dataTransfer.getData("application/reactflow");
+
+      // check if the dropped element is valid
+      if (typeof type === "undefined" || !type) {
+        return;
+      }
+
+      const position = project({
+        x: event.clientX - reactFlowBounds.left,
+        y: event.clientY - reactFlowBounds.top,
+      });
+
+      const newNode = {
+        id: getId(),
+        type,
+        position,
+        data: { label: `${type} node` },
+      };
+
+      setNodes((nds) => nds.concat(newNode));
+    },
+    [reactFlowInstance]
+  );
   return (
     <>
       <div ref={reactFlowWrapper}>
@@ -426,6 +468,7 @@ const SaveRestore = () => {
           }}
         />
       </div>
+      <Sidebar />
       <ReactFlow
         nodeTypes={nodeTypes}
         nodes={nodes}
@@ -439,6 +482,8 @@ const SaveRestore = () => {
         onNodeClick={onElementClick}
         elements={elements}
         //@ts-ignore
+        onDrop={onDrop}
+        onDragOver={onDragOver}
         onConnectEnd={onConnectEnd}
         //@ts-ignore
         onInit={setRfInstance}
