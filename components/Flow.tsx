@@ -395,6 +395,7 @@ const SaveRestore = () => {
   const onElementClick = (event: any, object: any) => {
     const graphElements = [object.id];
     console.log("w1");
+    //@ts-ignore
     setElements((els) => {
       setEdges((edges) =>
         edges.sort((a, b) => {
@@ -429,7 +430,7 @@ const SaveRestore = () => {
 
   //Function
   const onDrop = useCallback(
-    (event) => {
+    (event: any) => {
       event.preventDefault();
       //@ts-ignore
 
