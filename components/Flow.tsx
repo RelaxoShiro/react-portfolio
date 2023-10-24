@@ -9,6 +9,8 @@ import ReactFlow, {
   MiniMap,
   Controls,
   SmoothStepEdge,
+  Background,
+  BackgroundVariant,
 } from "reactflow";
 import CustomNode from "./CustomNode";
 import ELK from "elkjs";
@@ -21,8 +23,9 @@ const flowKey = "example-flow";
 const nodeTypes = {
   selectorNode: CustomNode,
 };
-const onLoad = (reactFlowInstance: { fitView: () => any }) =>
-  reactFlowInstance.fitView();
+const EdgeTypes = {
+  smoothstep: SmoothStepEdge, // Map the "smoothstep" type to the SmoothStepEdge component
+};
 
 const initialNodes = [
   {
@@ -262,6 +265,8 @@ const SaveRestore = () => {
       localStorage.setItem(flowKey, JSON.stringify(flow));
     }
   }, [rfInstance]);
+  const onLoad = (reactFlowInstance: { fitView: () => any }) =>
+    reactFlowInstance.fitView();
 
   //Function
   const onRestore = useCallback(() => {
@@ -490,21 +495,18 @@ const SaveRestore = () => {
           }}
         />
       </div>
-      <Sidebar />
       <ReactFlow
         nodeTypes={nodeTypes}
         nodes={nodes}
         edges={edges}
-        edgeTypes={{
-          smoothstep: SmoothStepEdge, // Map the "smoothstep" type to the SmoothStepEdge component
-        }}
+        edgeTypes={EdgeTypes}
         deleteKeyCode="Delete"
         multiSelectionKeyCode="Shift"
         onNodesChange={onNodesChange}
         onNodeClick={onElementClick}
         elements={elements}
         //@ts-ignore
-        onLoad={onLoad}
+        onLoad={onRestore}
         onDrop={onDrop}
         onDragOver={onDragOver}
         onConnectEnd={onConnectEnd}
@@ -515,6 +517,12 @@ const SaveRestore = () => {
         onConnectStart={onConnectStart}
         fitView
       >
+        <Background
+          id="1"
+          gap={25}
+          color="#a1a1a1"
+          variant={BackgroundVariant.Cross}
+        />
         <Panel position="top-right">
           <div className="m-4 flex gap-4">
             <button
