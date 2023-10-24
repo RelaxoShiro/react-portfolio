@@ -1,11 +1,6 @@
 import { useCallback, useMemo, useRef, useState } from "react";
 import ReactFlow, {
-  ReactFlowProvider,
-  Node,
   addEdge,
-  Background,
-  Edge,
-  Connection,
   useNodesState,
   useReactFlow,
   Panel,
@@ -482,6 +477,7 @@ const SaveRestore = () => {
         onNodeClick={onElementClick}
         elements={elements}
         //@ts-ignore
+        onLoad={onLoad}
         onDrop={onDrop}
         onDragOver={onDragOver}
         onConnectEnd={onConnectEnd}
