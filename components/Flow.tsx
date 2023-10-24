@@ -1,5 +1,5 @@
 //Imports
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import ReactFlow, {
   addEdge,
   useNodesState,
@@ -222,7 +222,7 @@ const initialEdges = [
   },
 ];
 
-const SaveRestore = () => {
+const SaveRestore = (props: any) => {
   const nodeTypes = useMemo(
     () => ({
       selectorNode: CustomNode,
@@ -256,7 +256,7 @@ const SaveRestore = () => {
     (params: any) => setEdges((eds: any) => addEdge(params, eds)),
     [setEdges]
   );
-
+  let autosave1 = true;
   //Function
   const onSave = useCallback(() => {
     if (rfInstance) {
@@ -267,22 +267,27 @@ const SaveRestore = () => {
   }, [rfInstance]);
   const onLoad = (reactFlowInstance: { fitView: () => any }) =>
     reactFlowInstance.fitView();
-
+  let firstLoad = true;
   //Function
   const onRestore = useCallback(() => {
     const restoreFlow = async () => {
       const flow = JSON.parse(localStorage.getItem(flowKey)!);
 
-      if (flow) {
+      if (flow && firstLoad) {
         const { x = 0, y = 0, zoom = 1 } = flow.viewport;
         setNodes(flow.nodes || []);
         setEdges(flow.edges || []);
         setViewport({ x, y, zoom });
+        firstLoad = false;
+        toast.success("State loaded");
       }
     };
 
     restoreFlow();
   }, [setNodes, setViewport, setEdges]);
+  useEffect(() => {
+    onRestore(); // Run onRestore when the component is mounted.
+  }, []); // Empty dependency array ensures this effect runs once when the component mounts.
 
   //Function
   const onAdd = useCallback(() => {
@@ -464,6 +469,15 @@ const SaveRestore = () => {
     [reactFlowInstance]
   );
 
+  const saveInterval = setInterval(onSave, 5000);
+
+  // If you want to stop the interval after a certain number of repetitions, you can use setTimeout like this:
+  // Stop calling onSave after 10 repetitions (10 * 5 seconds)
+  const repetitions = 10;
+  setTimeout(() => {
+    clearInterval(saveInterval);
+    console.log("Stopped saving.");
+  }, repetitions * 5000);
   //End
   return (
     <>
@@ -506,7 +520,7 @@ const SaveRestore = () => {
         onNodeClick={onElementClick}
         elements={elements}
         //@ts-ignore
-        onLoad={onRestore}
+        onLoad={onLoad}
         onDrop={onDrop}
         onDragOver={onDragOver}
         onConnectEnd={onConnectEnd}
@@ -518,7 +532,8 @@ const SaveRestore = () => {
         fitView
       >
         <Background
-          id="1"
+          id="2"
+          className="bg-gray-50"
           gap={25}
           color="#a1a1a1"
           variant={BackgroundVariant.Cross}
@@ -531,6 +546,7 @@ const SaveRestore = () => {
             >
               Save Story
             </button>
+
             <button
               className="bg-blue-300 rounded-md p-2 w-[8.5rem] "
               onClick={onRestore}
@@ -568,28 +584,6 @@ const SaveRestore = () => {
               }}
             >
               horizontal layout
-            </button>
-            <button
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-              onClick={() => {
-                toast.success("Autolayout applied!");
-                getLayoutedElements({
-                  "elk.algorithm": "org.eclipse.elk.layered",
-                });
-              }}
-            >
-              radial layout
-            </button>
-            <button
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-              onClick={() => {
-                toast.success("Autolayout applied!");
-                getLayoutedElements({
-                  "elk.algorithm": "org.eclipse.elk.force",
-                });
-              }}
-            >
-              force layout
             </button>
           </div>
         </Panel>

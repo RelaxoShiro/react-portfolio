@@ -9,7 +9,7 @@ const DndSidebar: React.FC = () => {
   return (
     <section
       style={{ height: "calc(100vh - 63px)" }}
-      className=" lg:visible invisible  flex-auto w-1/5 order-first sticky   left-0 top-0 bg-white border-r border-black z-1"
+      className=" lg:visible invisible  flex-auto w-1/5 order-first sticky   left-0 top-0 bg-white border-r border-slate-300  z-1"
     >
       <div className="description">
         You can drag these nodes to the pane on the right.
