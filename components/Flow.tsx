@@ -470,9 +470,7 @@ const SaveRestore = (props: any) => {
 
   // If you want to stop the interval after a certain number of repetitions, you can use setTimeout like this:
   // Stop calling onSave after 10 repetitions (10 * 5 seconds)
-  setTimeout(() => {
-    const saveInterval = setInterval(onSave, 500);
-  }, 5000);
+
   //End
   return (
     <>
