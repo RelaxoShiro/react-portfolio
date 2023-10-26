@@ -66,7 +66,7 @@ const Navbar = () => {
                 App
               </Link>
             </li>
-            <li></li>
+            <button onClick={() => signOut()}>Sign out</button>
           </ul>
         </div>
       </div>

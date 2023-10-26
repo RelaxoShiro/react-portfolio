@@ -7,7 +7,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
+      <body className="bg-slate-800">
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>

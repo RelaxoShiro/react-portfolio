@@ -41,7 +41,7 @@ export default async function ProtectedRoute() {
             />
             <div className="leading-none my-auto flex-col flex  pl-2">
               <p className="float-left mb-2">{session.user.name}</p>
-              <span className="font-semibold  inline-flex items-center gap-1 pt-1  inset-y-auto px-1.5 pb-0.5 rounded-md bg-transparent text-[11px] bg-gradient-to-br from-purple-600 to-blue-500 ring-white  ring-2">
+              <span className="font-semibold  inline-flex items-center gap-1 pt-1 w-10  inset-y-auto px-1.5 pb-0.5 rounded-md bg-transparent text-[11px] bg-gradient-to-br from-purple-600 to-blue-500 ring-white  ring-2">
                 FREE
               </span>
             </div>
