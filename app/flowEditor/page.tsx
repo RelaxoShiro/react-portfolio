@@ -11,7 +11,9 @@ export default function Home() {
         <Sidebar />
         <main className="w-[100%]">
           <ReactFlowProvider>
-            <Flow />
+            <StrictMode>
+              <Flow />
+            </StrictMode>
           </ReactFlowProvider>
         </main>
       </div>

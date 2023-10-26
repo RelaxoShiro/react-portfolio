@@ -1,16 +1,20 @@
 "use client";
-
+import React, { ReactNode } from "react";
 import Navbar from "@/components/Navbar";
-
-export default function ClientLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+import { getServerSession } from "next-auth";
+import { NextAuthProvider } from "./components/SessionProvider";
+type Props = {
+  children: ReactNode;
+};
+function ClientLayout({ children }: { children: ReactNode }) {
   return (
     <>
-      <Navbar />
-      {children}
+      <NextAuthProvider>
+        <Navbar />
+        {children}
+      </NextAuthProvider>
     </>
   );
 }
+
+export default ClientLayout;
